@@ -1,0 +1,14 @@
+# Lakehouse configuration (fill values)
+lakehouse_name: "<YOUR_LAKEHOUSE_NAME>"
+one_lake_root: "<OneLake root path or container>" # e.g. '/OneLake/fabric'
+paths:
+  raw: "<oneLake>/fabric/raw"
+  silver: "<oneLake>/fabric/silver"
+  gold: "<oneLake>/fabric/gold"
+jdbc:
+  url: "jdbc:sqlserver://<HOST>;databaseName=<DB>"
+  user: "<USERNAME_PLACEHOLDER>"
+  password_secret_name: "<SECRET_NAME_IN_KEYVAULT>"
+  table: "<CDS_VIEW_SCHEMA>.<CDS_VIEW_NAME>"
+notes: |
+  Replace placeholders with your environment-specific values. Store credentials in secrets and avoid hardcoding passwords in notebooks.
