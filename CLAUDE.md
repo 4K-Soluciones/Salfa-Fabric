@@ -36,13 +36,30 @@ SAP ECC → [CDS/OData] → Landing → Bronze → Silver → Gold → Seedz API
 
 ```
 Salfa-Fabric/
-├── CLAUDE.md                          ← YOU ARE HERE
+├── CLAUDE.md                          ← YOU ARE HERE — read this first
+├── sap/
+│   └── z4k_fb/                        ← SAP CDS Views for Fabric extraction (abapGit format)
+│       ├── README.md                  ← CDS catalog, OData setup, SALFA-specific findings
+│       └── src/
+│           ├── package.devc.xml       ← ABAP package definition (Z4K_FB)
+│           ├── zfb_cds01.ddls.xml     ← Customer master (KNA1 + ADRC) — Full load
+│           ├── zfb_cds02.ddls.xml     ← Seller master (ZES229_VENDEDORES) — TBD with SALFA
+│           ├── zfb_cds03.ddls.xml     ← Sales orders (VBAK + VBAP + VBPA) — ODP Delta
+│           ├── zfb_cds04.ddls.xml     ← Material master ALL brands (MARA + MAKT + MARC) — Full
+│           ├── zfb_cds05.ddls.xml     ← Billing docs (VBRK + VBRP + VBPA) — ODP Delta
+│           ├── zfb_cds06.ddls.xml     ← Equipment master VIN/batch (EQUI + EQKT) — Full
+│           ├── zfb_cds07.ddls.xml     ← Accounts receivable (BSID + BSAD) — ODP Delta
+│           └── zfb_cds08.ddls.xml     ← Change documents for delta detection (CDHDR + CDPOS)
 ├── agent_docs/
+│   ├── design_decisions.md            ← 20 architectural decisions (D1–D20) — READ BEFORE CODING
 │   ├── schemas_reference.md           ← All Bronze/Silver/Gold table schemas
 │   ├── task_queue.md                  ← 28 tasks with dependencies and acceptance criteria
-│   ├── golden_fixtures.md             ← Real SAP data: input → expected output (TODO: fill after Eclipse extraction)
 │   ├── business_rules.md              ← SALFA-specific transformation rules
-│   └── seedz_api_payloads.md          ← Seedz API endpoint formats and field mappings
+│   ├── seedz_api_payloads.md          ← Seedz API endpoint formats and field mappings
+│   ├── coding_standards.md            ← PEP 8, SOLID, functional patterns for PySpark
+│   ├── golden_fixtures.md             ← Real SAP data: input → expected output (fill after Eclipse)
+│   ├── golden_fixture_queries.sql     ← SQL queries to run in Eclipse ADT Open SQL Console
+│   └── golden_fixtures_template.xlsx  ← Excel template for tracing Bronze→Silver→Gold
 ├── config/
 │   ├── config_brand_rules.csv         ← Brand classification rules (JD parts, JD machines, future brands)
 │   └── config_vehicle_state.csv       ← SPART → vehicleState mapping (N/U)
@@ -58,6 +75,12 @@ Salfa-Fabric/
 │       └── ...
 └── .gitignore
 ```
+
+> **SAP BW analogy:** `sap/z4k_fb/` = your DataSource definitions in RSA1.
+> `agent_docs/` = your transformation rules and documentation.
+> `src/notebooks/` = your BW transformations and process chains.
+> The CDS views are the SOURCE LAYER — read them to understand what fields arrive in Bronze,
+> but NEVER modify them from Fabric side. Changes go through Eclipse ADT → abapGit → transport.
 
 ## Naming Conventions (MANDATORY)
 
@@ -174,13 +197,14 @@ def set_watermark(table_name, watermark_value):
 ## How to Work
 
 ### When I say "Task X.Y":
-1. Look up the task in `agent_docs/task_queue.md`
-2. Read the relevant schema from `agent_docs/schemas_reference.md`
-3. Check business rules in `agent_docs/business_rules.md`
-4. If Gold layer, check API format in `agent_docs/seedz_api_payloads.md`
-5. Check golden fixtures in `agent_docs/golden_fixtures.md` for expected I/O
-6. Generate the complete notebook following the template above
-7. Write a test file in `src/tests/`
+1. Read `agent_docs/design_decisions.md` — know the 20 architectural rules
+2. Look up the task in `agent_docs/task_queue.md`
+3. Read the relevant schema from `agent_docs/schemas_reference.md`
+4. Check business rules in `agent_docs/business_rules.md`
+5. If Gold layer, check API format in `agent_docs/seedz_api_payloads.md`
+6. Check golden fixtures in `agent_docs/golden_fixtures.md` for expected I/O
+7. Generate the complete notebook following the template above
+8. Write a test file in `src/tests/`
 
 ### When I say "Generate all Bronze notebooks":
 1. Loop through tasks 1.1–1.7 in task_queue
