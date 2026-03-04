@@ -1,0 +1,5 @@
+brand,rule_type,field,operator,value,item_category,description
+JD,PART,mfrnr,IN,0000100005,PARTS,John Deere parts manufacturer 1
+JD,PART,mfrnr,IN,0000100157,PARTS,John Deere parts manufacturer 2
+JD,MACHINE,spart,LIKE,M%,MACHINERY,John Deere machinery divisions (M0-M5)
+JD,MACHINE,matkl,EQ,0005,MACHINERY,Material group for machinery (combined with SPART rule)

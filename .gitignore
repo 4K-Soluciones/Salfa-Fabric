@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Jupyter / Fabric Notebooks
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Fabric local
+.fabric/
+.synapse/
+
+# Secrets — NEVER commit
+.env
+*.key
+*.pem
+secrets/
+
+# Data files (too large for git)
+*.parquet
+*.delta/
+*.csv.gz
+
+# Logs
+*.log
+logs/
