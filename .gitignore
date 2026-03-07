@@ -44,3 +44,6 @@ secrets/
 # Logs
 *.log
 logs/
+
+# Azurite local storage emulator
+__azurite_db_*.json
